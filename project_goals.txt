@@ -22,7 +22,7 @@ Goal-by-Goal Pseudocode
 Task 1 (COMPLETED)
 
 Task 2: Create sentiment analysis app using Watson NLP
-CREATE module for sentiment logic (example: sentiment_analyzer.py)
+CREATE module for sentiment logic (example: sentiment_analyzer.py) (COMPLETED)
 DEFINE function sentiment_analyzer(text):
 IF text is empty:
 RETURN error object indicating invalid input
