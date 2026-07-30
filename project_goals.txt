@@ -1,0 +1,146 @@
+Task 1: Clone the project repository
+Task 2: Create a sentiment analysis application using Watson NLP library
+Task 3: Format the output of the application
+Task 4: Package the application
+Task 5: Run Unit tests on your application
+Task 6: Deploy as web application using Flask
+Task 7: Incorporate error handling
+Task 8: Run static code analysis
+
+
+High-Level Flow
+
+    User opens home page.
+    Home page shows text box and button.
+    User enters text and clicks analyze.
+    JavaScript sends text to Flask endpoint.
+    Flask endpoint calls sentiment analysis function.
+    Flask returns formatted result (or error message).
+    JavaScript displays response on page.
+
+Goal-by-Goal Pseudocode
+Task 1 (COMPLETED)
+
+Task 2: Create sentiment analysis app using Watson NLP
+CREATE module for sentiment logic (example: sentiment_analyzer.py)
+DEFINE function sentiment_analyzer(text):
+IF text is empty:
+RETURN error object indicating invalid input
+CALL Watson NLP endpoint/library with text
+PARSE response to extract:
+negative score
+neutral score
+positive score
+dominant sentiment label
+RETURN dictionary/object with parsed values
+HANDLE network/API exceptions and return error object
+
+Task 3: Format output
+IN Flask route /sentimentAnalyzer:
+GET query parameter textToAnalyze
+CALL sentiment_analyzer(textToAnalyze)
+IF response contains error:
+RETURN user-friendly error message string
+ELSE:
+BUILD formatted sentence:
+“For the given statement, the system response is
+'label': X,
+'negative': A,
+'neutral': B,
+'positive': C.”
+RETURN formatted string to browser
+
+Task 4: Package the application
+CREATE package structure for sentiment logic
+ADD init file in package folder
+MOVE analyzer function into package module
+UPDATE imports in server.py
+CREATE requirements file listing Flask and Watson SDK dependencies
+VERIFY app starts after packaging changes
+
+Task 5: Unit tests
+CREATE test file for sentiment function
+TEST valid text input returns all expected keys
+TEST empty text returns error
+TEST neutral statement returns neutral/highest label (or expected mock result)
+TEST API failure path (mock network failure)
+RUN tests and confirm all pass
+
+Task 6: Deploy web app with Flask
+IN server.py:
+IMPORT Flask, render_template, request
+IMPORT sentiment_analyzer from your package
+CREATE Flask app instance
+DEFINE route “/”:
+RETURN render_template for index.html
+DEFINE route “/sentimentAnalyzer”:
+READ user text from request args
+CALL sentiment_analyzer
+RETURN formatted response string
+RUN app on host 0.0.0.0 and port 5000 when file executed directly
+START Flask server and verify browser access
+
+Task 7: Error handling
+VALIDATE input text before API call
+IF input missing/blank:
+RETURN “Invalid text! Please try again.”
+WRAP Watson call in try/except
+IF exception occurs:
+LOG technical details on server side
+RETURN safe message to user:
+“Sentiment service unavailable. Please try again later.”
+IN JavaScript, detect non-200 response and show fallback message
+
+Task 8: Static code analysis
+INSTALL linter (example: pylint or flake8)
+RUN linter on Python files
+FIX warnings/errors:
+import ordering
+function naming/style
+unused variables
+docstring completeness
+RE-RUN until acceptable score/no critical issues
+
+
+File-by-File Pseudocode
+
+server.py
+Import Flask utilities
+Import sentiment_analyzer function
+Initialize app
+Route /sentimentAnalyzer:
+read textToAnalyze
+if empty return invalid text message
+result = sentiment_analyzer(text)
+if result error return error message
+return formatted string
+Route /:
+return index page
+main block:
+app.run(host, port, debug)
+mywebscript.js
+Define RunSentimentAnalysis function
+Read text from text area
+Build request URL with encoded text
+Send GET request to /sentimentAnalyzer
+On success:
+Put response text into system_response div
+On failure:
+Show error message in system_response div
+index.html
+Include CSS framework
+Include JS file
+Render heading and input box
+Render button that calls RunSentimentAnalysis
+Render output area for response text
+
+
+Recommended Implementation Order
+
+Complete server.py TODOs first.
+Create sentiment analyzer module and return mock data first.
+Confirm browser-to-Flask flow works end-to-end.
+Replace mock with Watson call.
+Add robust error handling.
+Add tests.
+Run static analysis and clean up.

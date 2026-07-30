@@ -2,10 +2,14 @@
     analysis to be executed over the Flask channel and deployed on
     localhost:5000.
 '''
-# Import Flask, render_template, request from the flask pramework package : TODO
-# Import the sentiment_analyzer function from the package created: TODO
+# Import Flask, render_template, request from the flask pramework package : 
+# Import the sentiment_analyzer function from the package created:
 
-#Initiate the flask app : TODO
+import flask, render_template
+from sentiment_analyzer import sentiment_analyzer
+
+#Initiate the flask app :
+app = Flask('sentiment_analyzer')
 
 @app.route("/sentimentAnalyzer")
 def sent_analyzer():
@@ -14,7 +18,18 @@ def sent_analyzer():
         function. The output returned shows the label and its confidence 
         score for the provided text.
     '''
-    # TODO
+    # GET query parameter textToAnalyze
+    # CALL sentiment_analyzer(textToAnalyze)
+    # IF response contains error:
+    # RETURN user-friendly error message string
+    # ELSE:
+    # BUILD formatted sentence:
+    # “For the given statement, the system response is
+    # 'label': X,
+    # 'negative': A,
+    # 'neutral': B,
+    # 'positive': C.”
+    # RETURN formatted string to browser
 
 @app.route("/")
 def render_index_page():
