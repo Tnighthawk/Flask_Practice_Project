@@ -2,37 +2,20 @@
     analysis to be executed over the Flask channel and deployed on
     localhost:5000.
 '''
-# Import Flask, render_template, request from the flask pramework package : 
+# Import Flask, render_template, request from the flask framework package : 
 # Import the sentiment_analyzer function from the package created:
 
-import flask, render_template, request
-from sentiment_analyzer import sentiment_analysis
+from flask import Flask, render_template, request
+from sentiment_analyzer import run_sentiment_analysis
 
 #Initiate the flask app :
 app = Flask(__name__)
-
-# Configure session to use filesystem (instead of signed cookies)
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-session(app)
-
-@app.after_request
-def after_request(response):
-    """Ensure responses aren't cached"""
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Expires"] = 0
-    response.headers["Pragma"] = "no-cache"
-    return response
-
-# Forget any user_id
-    session.clear()
 
 @app.route("/")
 def render_index_page():
     ''' This function initiates the rendering of the main application
         page over the Flask channel
     '''
-    user_id = session["user_id"]
     return render_template("index.html")
 
 @app.route("/sentimentAnalyzer", methods=["GET"])
@@ -43,23 +26,29 @@ def sent_analyzer():
         score for the provided text.
     '''
     # GET query parameter textToAnalyze
-    if request.method == "GET":
-        # CALL sentiment_analyzer(textToAnalyze)
-        sentiment_analysis
+    # CALL sentiment_analyzer(textToAnalyze)
+    text_to_analyze = request.args.get("textToAnalyze")
+    response = run_sentiment_analysis(text_to_analyze)
     # IF response contains error:
-    
-    # RETURN user-friendly error message string
-    # ELSE:
+    label = response['label']
+    if label is None:
+        # RETURN user-friendly error message string
+        return "Invalid input! Try again."
+    # ELSE: BUILD formatted sentence:
     else:
-        print("error")
-    # BUILD formatted sentence:
-    # “For the given statement, the system response is
-
-    # 'label': X,
-    # 'negative': A,
-    # 'neutral': B,
-    # 'positive': C.”
-    # RETURN formatted string to browser
+        # 'label': X,
+        label = response['label']
+        # 'negative': A,
+        negative = response['negative']
+        # 'neutral': B,
+        neutral = response['neutral']
+        # 'positive': C.”
+        positive = response['positive']
+        # RETURN formatted string to browser
+        return(
+            f"For the given statement, the system response is "
+            f"'{label}' with negative score of {negative}, neutral score of {neutral}, and positive score of {positive}."
+        )
 
 
 if __name__ == "__main__":
